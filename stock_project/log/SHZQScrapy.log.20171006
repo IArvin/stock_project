@@ -1,0 +1,40 @@
+2017-10-06 15:23:01,137 - MainThread - INFO - Starting new HTTP connection (1): www.sse.com.cn
+2017-10-06 15:23:01,239 - MainThread - DEBUG - "GET / HTTP/1.1" 200 13353
+2017-10-06 15:23:03,815 - MainThread - INFO - Starting new HTTP connection (1): query.sse.com.cn
+2017-10-06 15:23:03,895 - MainThread - DEBUG - "GET /search/getSearchResult.do?orderby=-CRELEASETIME&search=qwjs&perpage=10&searchword=T_L+CTITLE+T_D+E_KEYWORDS+T_JT_E+likeT_L%E5%85%B3%E6%B3%A8%E5%87%BDT_RT_R&jsonCallBack=jQuery111207759621206437564_1507274276819&page=1&_=1507274276820 HTTP/1.1" 403 None
+2017-10-06 15:27:04,418 - MainThread - INFO - Starting new HTTP connection (1): query.sse.com.cn
+2017-10-06 15:27:04,503 - MainThread - DEBUG - "GET /search/getSearchResult.do?orderby=-CRELEASETIME&search=qwjs&perpage=10&searchword=T_L+CTITLE+T_D+E_KEYWORDS+T_JT_E+likeT_L%E5%85%B3%E6%B3%A8%E5%87%BDT_RT_R&jsonCallBack=jQuery111207759621206437564_1507274276819&page=1&_=1507274276820 HTTP/1.1" 403 None
+2017-10-06 15:27:19,075 - MainThread - INFO - Starting new HTTP connection (1): query.sse.com.cn
+2017-10-06 15:27:19,144 - MainThread - DEBUG - "GET /search/getSearchResult.do?orderby=-CRELEASETIME&search=qwjs&perpage=10&searchword=T_L+CTITLE+T_D+E_KEYWORDS+T_JT_E+likeT_L%E5%85%B3%E6%B3%A8%E5%87%BDT_RT_R&jsonCallBack=jQuery1112036704347904532786_1507274740396&page=1&_=1507274276820 HTTP/1.1" 403 None
+2017-10-06 15:30:19,769 - MainThread - INFO - Starting new HTTP connection (1): www.sse.com.cn
+2017-10-06 15:30:20,101 - MainThread - DEBUG - "GET / HTTP/1.1" 200 13353
+2017-10-06 15:30:22,325 - MainThread - DEBUG - "GET /home/search?webswd=%E5%85%B3%E6%B3%A8%E5%87%BD HTTP/1.1" 301 231
+2017-10-06 15:30:22,388 - MainThread - DEBUG - "GET /home/search/?webswd=%E5%85%B3%E6%B3%A8%E5%87%BD HTTP/1.1" 200 10968
+2017-10-06 15:50:31,115 - MainThread - INFO - Starting new HTTP connection (1): www.sse.com.cn
+2017-10-06 15:50:31,223 - MainThread - DEBUG - "GET / HTTP/1.1" 200 13353
+2017-10-06 15:50:32,316 - MainThread - DEBUG - "GET /home/search?webswd=%E5%85%B3%E6%B3%A8%E5%87%BD HTTP/1.1" 301 231
+2017-10-06 15:50:32,377 - MainThread - DEBUG - "GET /home/search/?webswd=%E5%85%B3%E6%B3%A8%E5%87%BD HTTP/1.1" 200 10968
+2017-10-06 15:52:07,936 - MainThread - INFO - Starting new HTTP connection (1): www.sse.com.cn
+2017-10-06 15:52:08,048 - MainThread - DEBUG - "GET / HTTP/1.1" 200 13353
+2017-10-06 15:52:09,993 - MainThread - DEBUG - "GET /home/search?webswd=%E5%85%B3%E6%B3%A8%E5%87%BD HTTP/1.1" 301 231
+2017-10-06 15:52:10,042 - MainThread - DEBUG - "GET /home/search/?webswd=%E5%85%B3%E6%B3%A8%E5%87%BD HTTP/1.1" 200 10968
+2017-10-06 15:52:15,365 - MainThread - INFO - Starting new HTTP connection (1): query.sse.com.cn
+2017-10-06 15:52:15,459 - MainThread - DEBUG - "GET /search/getSearchResult.do?orderby=-CRELEASETIME&search=qwjs&perpage=10&searchword=T_L+CTITLE+T_D+E_KEYWORDS+T_JT_E+likeT_L%E5%85%B3%E6%B3%A8%E5%87%BDT_RT_R&jsonCallBack=jQuery1112036704347904532786_1507276332&page=1&_=1507276334 HTTP/1.1" 403 None
+2017-10-06 15:55:41,874 - MainThread - INFO - Starting new HTTP connection (1): www.sse.com.cn
+2017-10-06 15:55:41,984 - MainThread - DEBUG - "GET / HTTP/1.1" 200 13353
+2017-10-06 15:55:42,897 - MainThread - DEBUG - "GET /home/search?webswd=%E5%85%B3%E6%B3%A8%E5%87%BD HTTP/1.1" 301 231
+2017-10-06 15:55:42,959 - MainThread - DEBUG - "GET /home/search/?webswd=%E5%85%B3%E6%B3%A8%E5%87%BD HTTP/1.1" 200 10968
+2017-10-06 15:58:36,996 - MainThread - INFO - Starting new HTTP connection (1): www.sse.com.cn
+2017-10-06 15:58:37,112 - MainThread - DEBUG - "GET / HTTP/1.1" 200 13353
+2017-10-06 15:58:38,342 - MainThread - DEBUG - "GET /home/search?webswd=%E5%85%B3%E6%B3%A8%E5%87%BD HTTP/1.1" 301 231
+2017-10-06 15:58:38,405 - MainThread - DEBUG - "GET /home/search/?webswd=%E5%85%B3%E6%B3%A8%E5%87%BD HTTP/1.1" 200 10968
+2017-10-06 15:58:42,871 - MainThread - INFO - Starting new HTTP connection (1): query.sse.com.cn
+2017-10-06 15:58:42,984 - MainThread - DEBUG - "GET /search/getSearchResult.do?orderby=-CRELEASETIME&search=qwjs&perpage=10&searchword=T_L+CTITLE+T_D+E_KEYWORDS+T_JT_E+likeT_L%E5%85%B3%E6%B3%A8%E5%87%BDT_RT_R&jsonCallBack=jQuery1112036704347904532786_1507276719000&page=1&_=1507276721000 HTTP/1.1" 200 6056
+2017-10-06 15:59:36,763 - MainThread - INFO - Starting new HTTP connection (1): query.sse.com.cn
+2017-10-06 15:59:36,884 - MainThread - DEBUG - "GET /search/getSearchResult.do?orderby=-CRELEASETIME&search=qwjs&perpage=10&searchword=T_L+CTITLE+T_D+E_KEYWORDS+T_JT_E+likeT_L%E5%85%B3%E6%B3%A8%E5%87%BDT_RT_R&jsonCallBack=jQuery1112036704347904532786_1507276775000&page=1&_=1507276775000 HTTP/1.1" 200 6056
+2017-10-06 16:00:24,832 - MainThread - INFO - Starting new HTTP connection (1): query.sse.com.cn
+2017-10-06 16:00:24,946 - MainThread - DEBUG - "GET /search/getSearchResult.do?orderby=-CRELEASETIME&search=qwjs&perpage=10&searchword=T_L+CTITLE+T_D+E_KEYWORDS+T_JT_E+likeT_L%E5%85%B3%E6%B3%A8%E5%87%BDT_RT_R&jsonCallBack=jQuery1112036704347904532786_1507276822000&page=1&_=1507276822000 HTTP/1.1" 200 6056
+2017-10-06 16:09:28,443 - MainThread - INFO - Starting new HTTP connection (1): query.sse.com.cn
+2017-10-06 16:09:28,566 - MainThread - DEBUG - "GET /search/getSearchResult.do?orderby=-CRELEASETIME&search=qwjs&perpage=10&searchword=T_L+CTITLE+T_D+E_KEYWORDS+T_JT_E+likeT_L%E5%85%B3%E6%B3%A8%E5%87%BDT_RT_R&jsonCallBack=jQuery1112036704347904532786_1507277366000&page=1&_=1507277366000 HTTP/1.1" 200 6056
+2017-10-06 18:29:46,009 - MainThread - INFO - Starting new HTTP connection (1): query.sse.com.cn
+2017-10-06 18:29:46,203 - MainThread - DEBUG - "GET /search/getSearchResult.do?orderby=-CRELEASETIME&search=qwjs&perpage=10&searchword=T_L+CTITLE+T_D+E_KEYWORDS+T_JT_E+likeT_L%E9%97%AE%E8%AF%A2%E5%87%BDT_RT_R&jsonCallBack=jQuery1112036704347904532786_1507285783000&page=1&_=1507285783000 HTTP/1.1" 200 6915
