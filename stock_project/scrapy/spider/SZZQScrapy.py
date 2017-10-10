@@ -15,7 +15,7 @@ from utils.threadpool import ThreadPool
 
 
 # createTime: 2017-10-09 12:02:33
-# desc: æ·±åœ³è¯åˆ¸äº¤æ˜“æ‰€ç›¸å…³æ•°æ®ä¸‹è½½
+# desc: ÉîÛÚÖ¤È¯½»Ò×ËùÏà¹ØÊı¾İÏÂÔØ
 
 
 def config_log():
@@ -57,6 +57,6 @@ class SZZQScrapy():
 if __name__ == '__main__':
     config_log()
     result = SZZQScrapy()
-    search_data = ['é—®è¯¢å‡½', 'å…³æ³¨å‡½']
+    search_data = ['é—®è¯¢å‡?', 'å…³æ³¨å‡?']
     for x in search_data:
         result.main(x)

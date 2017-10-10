@@ -11,7 +11,7 @@ from scrapy.scrapy import scrapy
 
 
 # createTime: 2017-9-28 11:52:41
-# desc: å·¨æ½®èµ„è®¯ç›¸å…³æ•°æ®ä¸‹è½½
+# desc: ¾Ş³±×ÊÑ¶Ïà¹ØÊı¾İÏÂÔØ
 
 
 def config_log():
@@ -87,6 +87,6 @@ class JCZXScrapy(scrapy):
 if __name__ == '__main__':
     config_log()
     result = JCZXScrapy()
-    search_data = ['å…³æ³¨å‡½', 'é—®è¯¢å‡½']
+    search_data = ['å…³æ³¨å‡?', 'é—®è¯¢å‡?']
     for x in search_data:
         result.main(x)

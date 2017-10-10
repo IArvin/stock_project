@@ -2,7 +2,6 @@
 import logging
 from logging.handlers import TimedRotatingFileHandler
 import json
-
 import datetime
 import requests
 import time
@@ -15,7 +14,7 @@ from utils.threadpool import ThreadPool
 
 
 # createTime: 2017-10-06 15:07:33
-# desc: ä¸Šæµ·è¯åˆ¸äº¤æ˜“æ‰€ç›¸å…³æ•°æ®ä¸‹è½½
+# desc: ÉÏº£Ö¤È¯½»Ò×ËùÏà¹ØÊı¾İÏÂÔØ
 
 def config_log():
     fmt = '%(asctime)s - %(threadName)s - %(levelname)s - %(message)s'
@@ -56,7 +55,7 @@ class SHZQScrapy(scrapy):
             "perpage": "10",
             "_": "%s000" % str(int(time.time()))
         }
-        if search_key == 'å…³æ³¨å‡½':
+        if search_key == 'å…³æ³¨å‡?':
             self.session.headers['Referer'] = 'http://www.sse.com.cn/home/search/?webswd=%E5%85%B3%E6%B3%A8%E5%87%BD'
         else:
             self.session.headers['Referer'] = 'http://www.sse.com.cn/home/search/?webswd=%E9%97%AE%E8%AF%A2%E5%87%BD'
@@ -100,6 +99,6 @@ class SHZQScrapy(scrapy):
 if __name__ == '__main__':
     config_log()
     result = SHZQScrapy()
-    search_data = ['é—®è¯¢å‡½', 'å…³æ³¨å‡½']
+    search_data = ['é—®è¯¢å‡?', 'å…³æ³¨å‡?']
     for x in search_data:
         result.main(x)
