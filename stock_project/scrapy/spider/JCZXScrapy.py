@@ -2,6 +2,8 @@
 import logging
 from logging.handlers import TimedRotatingFileHandler
 import json
+
+import datetime
 import requests
 import time
 import xlrd
@@ -11,7 +13,7 @@ from scrapy.scrapy import scrapy
 
 
 # createTime: 2017-9-28 11:52:41
-# desc: ¾Þ³±×ÊÑ¶Ïà¹ØÊý¾ÝÏÂÔØ
+# desc: å·¨æ½®èµ„è®¯ç›¸å…³æ•°æ®ä¸‹è½½
 
 
 def config_log():
@@ -31,7 +33,7 @@ class JCZXScrapy(scrapy):
         self.timeout = 12
 
     def search(self, search_key, index):
-        index_page = self.session.get('http://www.cninfo.com.cn/cninfo-new/index', timeout=self.timeout)
+        logging.info('index is: %s' % str(index))
         params = {
             "searchkey": search_key,
             "sdate": "",
@@ -43,6 +45,7 @@ class JCZXScrapy(scrapy):
         }
         search_page = {}
         try:
+            self.session.get('http://www.cninfo.com.cn/cninfo-new/index', timeout=self.timeout)
             search_page = self.session.get('http://www.cninfo.com.cn/cninfo-new/fulltextSearch/full', params=params, timeout=self.timeout).json()
         except Exception, e:
             logging.info(e)
@@ -50,7 +53,6 @@ class JCZXScrapy(scrapy):
         if search_page == {}:
             logging.info('search data failed...')
             return {}
-        print json.dumps(search_page)
         return search_page
 
     def parseRespone(self, search_page, search_key):
@@ -60,11 +62,16 @@ class JCZXScrapy(scrapy):
         data_list = []
         url = 'http://www.cninfo.com.cn/'
         for tr in search_page['announcements']:
+            judge_time = datetime.datetime.strptime('2017-09-30', '%Y-%m-%d')
+            now_file_time = datetime.datetime.strptime(tr['adjunctUrl'].split('/')[-2], '%Y-%m-%d')
+            if now_file_time > judge_time:
+                continue
+
             data_dict = {}
             data_dict['company_name'] = tr['secName']
             data_dict['title'] = tr['announcementTitle']
             data_dict['stock_id'] = tr['secCode']
-            data_dict['file_size'] = tr['adjunctSize']+'KB'
+            data_dict['file_size'] = str(tr['adjunctSize'])+'KB'
             data_dict['time'] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(str(tr['announcementTime'])[:-3])))
             self.savePDF(tr['adjunctUrl'], tr['secCode'], search_key, url, 'JCZX', tr['adjunctUrl'].split('/')[-2])
             data_list.append(data_dict)
@@ -79,7 +86,13 @@ class JCZXScrapy(scrapy):
             data_list = self.parseRespone(response_dict, data)
             if data_list == []:
                 break
-            self.xlsWrite(data_list, 'JCZX', 'jczx_demo.xls')
+
+            if data == 'å…³æ³¨å‡½':
+                excel_file_name = 'jczx_attention_demo.xls'
+            else:
+                excel_file_name = 'jczx_inquiry_demo.xls'
+
+            self.xlsWrite(data_list, 'JCZX', excel_file_name, data)
             index += 1
         return None
 
@@ -87,6 +100,6 @@ class JCZXScrapy(scrapy):
 if __name__ == '__main__':
     config_log()
     result = JCZXScrapy()
-    search_data = ['å…³æ³¨å‡?', 'é—®è¯¢å‡?']
+    search_data = ['å…³æ³¨å‡½', 'é—®è¯¢å‡½']
     for x in search_data:
         result.main(x)

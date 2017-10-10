@@ -14,7 +14,7 @@ from utils.threadpool import ThreadPool
 
 
 # createTime: 2017-10-06 15:07:33
-# desc: ÉÏº£Ö¤È¯½»Ò×ËùÏà¹ØÊý¾ÝÏÂÔØ
+# desc: ä¸Šæµ·è¯åˆ¸äº¤æ˜“æ‰€ç›¸å…³æ•°æ®ä¸‹è½½
 
 def config_log():
     fmt = '%(asctime)s - %(threadName)s - %(levelname)s - %(message)s'
@@ -42,10 +42,15 @@ class SHZQScrapy(scrapy):
             data_list = self.parseResponse(resultStr, search_key)
             if data_list == []:
                 break
-            self.xlsWrite(data_list, 'SHZQ', 'shzq_demo.xls')
+            if search_key == 'å…³æ³¨å‡½':
+                excel_file_name = 'shzq_attention_demo.xls'
+            else:
+                excel_file_name = 'shzq_inquiry_demo.xls'
+            self.xlsWrite(data_list, 'SHZQ', excel_file_name, search_key)
             index += 1
 
     def search(self, search_key, index):
+        logging.info('index is: %s' % str(index))
         data = {
             "search": "qwjs",
             "jsonCallBack": "jQuery1112036704347904532786_%s000" % str(int(time.time())),
@@ -55,7 +60,7 @@ class SHZQScrapy(scrapy):
             "perpage": "10",
             "_": "%s000" % str(int(time.time()))
         }
-        if search_key == 'å…³æ³¨å‡?':
+        if search_key == 'å…³æ³¨å‡½':
             self.session.headers['Referer'] = 'http://www.sse.com.cn/home/search/?webswd=%E5%85%B3%E6%B3%A8%E5%87%BD'
         else:
             self.session.headers['Referer'] = 'http://www.sse.com.cn/home/search/?webswd=%E9%97%AE%E8%AF%A2%E5%87%BD'
@@ -67,9 +72,8 @@ class SHZQScrapy(scrapy):
         if response == '' or response.status_code != 200:
             logging.info('search data failed...')
             return None
-        start = response.text.find(data['jsonCallBack']+'(')
-        end = response.text.find(")", start)
-        resultStr = response.text[start + len(data['jsonCallBack']+'('):end]
+        start = response.text[:-1]
+        resultStr = start.replace(data['jsonCallBack']+'(', '')
         return resultStr
 
     def parseResponse(self, response, search_key):
@@ -85,13 +89,20 @@ class SHZQScrapy(scrapy):
             now_file_time = datetime.datetime.strptime(tr['CRELEASETIME'], '%Y-%m-%d')
             if now_file_time > judge_time:
                 continue
+            if '_' in tr['CURL'].split('/')[-1]:
+                data_dict['stock_id'] = tr['CURL'].split('/')[-1].split('_')[0]
+            else:
+                logging.info('the file is doc...')
+                data_dict['stock_id'] = tr['CURL'].split('/')[-1].split('.')[0] + '_doc'
 
-            data_dict['company_name'] = ''
+            if u'ï¼š' in tr['CTITLE_TXT']:
+                data_dict['company_name'] = tr['CTITLE_TXT'].split(u'ï¼š')[0]
+            else:
+                data_dict['company_name'] = ''
             data_dict['title'] = tr['CTITLE_TXT']
-            data_dict['stock_id'] = tr['CURL'].split('/')[-1].split('_')[0]
             data_dict['file_size'] = tr['FILESIZE']+'byte'
             data_dict['time'] = tr['CRELEASETIME'] + ' ' + tr['CRELEASETIME2']
-            self.savePDF(tr['CURL'], tr['CURL'].split('/')[-1].split('_')[0], search_key, url, 'SHZQ', tr['CRELEASETIME'])
+            self.savePDF(tr['CURL'], data_dict['stock_id'], search_key, url, 'SHZQ', tr['CRELEASETIME'])
             data_list.append(data_dict)
         return data_list
 
@@ -99,6 +110,6 @@ class SHZQScrapy(scrapy):
 if __name__ == '__main__':
     config_log()
     result = SHZQScrapy()
-    search_data = ['é—®è¯¢å‡?', 'å…³æ³¨å‡?']
+    search_data = ['é—®è¯¢å‡½', 'å…³æ³¨å‡½']
     for x in search_data:
         result.main(x)

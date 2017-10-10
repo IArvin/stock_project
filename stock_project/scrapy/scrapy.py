@@ -48,17 +48,20 @@ class scrapy(object):
         else:
             return ''
 
-        pdf_name = path + stock_id + '_' + file_time + '.PDF'
+        if '_doc' in stock_id:
+            pdf_name = path + stock_id.split('_')[0] + '_' + file_time + '.docx'
+        else:
+            pdf_name = path + stock_id + '_' + file_time + '.PDF'
 
         if pdf_name == '':
             return None
         f = open(pdf_name, 'wb')
         f.write(pdf_response.content)
         f.close()
-        logging.info('save success, return ...')
+        logging.info('save pdf file success, return ...')
         return 'success'
 
-    def write_excel(self, data_list, website):
+    def write_excel(self, data_list, website, search_key):
         excel = xlwt.Workbook()
         sheet01 = excel.add_sheet('demo_01')
         for index, tr in enumerate(data_list):
@@ -68,12 +71,18 @@ class scrapy(object):
             sheet01.write(index, 3, tr['file_size'])
             sheet01.write(index, 4, tr['time'])
         if website == 'JCZX':
-            excel.save('../../download_file/excel_file/jczx_demo.xls')
+            if search_key == '关注函':
+                excel.save('../../download_file/excel_file/jczx_attention_demo.xls')
+            else:
+                excel.save('../../download_file/excel_file/jczx_inquiry_demo.xls')
         elif website == 'SHZQ':
-            excel.save('../../download_file/excel_file/shzq_demo.xls')
+            if search_key == '关注函':
+                excel.save('../../download_file/excel_file/shzq_attention_demo.xls')
+            else:
+                excel.save('../../download_file/excel_file/shzq_inquiry_demo.xls')
         logging.info('save excel file success!')
 
-    def xlsWrite(self, data_list, website, file_name):
+    def xlsWrite(self, data_list, website, file_name, search_key):
         writeInfo = '../../download_file/excel_file/'
         listFile = os.listdir(writeInfo)
         if listFile != []:
@@ -98,9 +107,9 @@ class scrapy(object):
                     logging.info('write in success!')
                     break
             else:
-                self.write_excel(data_list, website)
+                self.write_excel(data_list, website, search_key)
         else:
-            self.write_excel(data_list, website)
+            self.write_excel(data_list, website, search_key)
 
 if __name__ == '__main__':
     res = scrapy()
