@@ -44,14 +44,50 @@ class SZZQScrapy(scrapy):
     def search(self, index):
         table_key_list = ["tab1", "tab2", "tab3"]
         all_result_dict = {}
+        logging.info('index is: %s' % str(index))
         for table_key in table_key_list:
-            data = {
-                "ACTIONID": "7",
-                "AJAX": "AJAX - TRUE",
-                "CATALOGID": "main_wxhj",
-                "tab2PAGENO": "%s" % str(index),
-                "TABKEY": table_key
-            }
+            if index == 1:
+                data = {
+                    "ACTIONID": "7",
+                    "AJAX": "AJAX - TRUE",
+                    "CATALOGID": "main_wxhj",
+                    "tab2PAGENO": "%s" % str(index),
+                    "TABKEY": table_key
+                }
+                if table_key == 'tab2':
+                    data.update({
+                        "tab1PAGENO": "%s" % str(index),
+                        "TABKEY": table_key,
+                    })
+                elif table_key == 'tab3':
+                    data.update({
+                        "tab1PAGENO": "%s" % str(index),
+                        "TABKEY": table_key,
+                    })
+            else:
+                data = {
+                    "ACTIONID": "7",
+                    "AJAX": "AJAX - TRUE",
+                    "CATALOGID": "main_wxhj",
+                    "TABKEY": table_key,
+                    "%sPAGENO" % table_key: "%s" % str(index),
+                    "REPORT_ACTION": "navigate",
+                }
+                if table_key == 'tab1':
+                    data.update({
+                        "tab1PAGECOUNT": "45",
+                        "tab1RECORDCOUNT": "897",
+                    })
+                elif table_key == 'tab2':
+                    data.update({
+                        "tab1PAGECOUNT": "42",
+                        "tab1RECORDCOUNT": "826",
+                    })
+                else:
+                    data.update({
+                        "tab3PAGECOUNT": "30",
+                        "tab3RECORDCOUNT": "584",
+                    })
             self.session.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
             self.session.headers['Accept-Encoding'] = 'gzip, deflate'
             self.session.headers['Accept-Language'] = 'zh-CN,zh;q=0.8'
@@ -64,7 +100,8 @@ class SZZQScrapy(scrapy):
 
     def save_pdf(self, stock_id, attention_time, detail_url, judge_type, table_key):
         index_url = 'http://www.szse.cn'
-
+        logging.info(detail_url)
+        logging.info('%s, %s'%(judge_type, table_key))
         url = index_url+detail_url.split("'")[1]+detail_url.split("'")[3]
         pdf_response = ''
         try:
@@ -116,7 +153,8 @@ class SZZQScrapy(scrapy):
             data_dict['detail_url'] = b('td:eq(4) a', tr).attr('onclick')
             data_dict['company_callback'] = b('td:eq(5)', tr).text().encode('unicode-escape').decode(
                 'string_escape').decode('gbk').encode('utf-8')
-            self.save_pdf(data_dict['stock_id'], data_dict['attention_time'], data_dict['detail_url'], 'detail', table_key)
+            if data_dict['detail_url'] != '' and data_dict['detail_url'] != None:
+                self.save_pdf(data_dict['stock_id'], data_dict['attention_time'], data_dict['detail_url'], 'detail', table_key)
             if data_dict['company_callback'] != '':
                 data_dict['company_callback_url'] = b('td:eq(5) a', tr).attr('onclick')
                 self.save_pdf(data_dict['stock_id'], data_dict['attention_time'], data_dict['company_callback_url'], 'callback', table_key)
@@ -142,12 +180,12 @@ class SZZQScrapy(scrapy):
                     index = 0
                     for tr in data_dict:
                         for value in data_dict[tr]:
-                            ws.write(index + nrows, 0, unicode(value['stock_id'], 'utf-8'))
+                            ws.write(index + nrows, 0, value['stock_id'])
                             ws.write(index + nrows, 1, unicode(value['company_name'], 'utf-8'))
-                            ws.write(index + nrows, 2, unicode(value['attention_time'], 'utf-8'))
+                            ws.write(index + nrows, 2, value['attention_time'])
                             ws.write(index + nrows, 3, unicode(value['attention_type'], 'utf-8'))
                             ws.write(index + nrows, 4, unicode(value['company_callback'], 'utf-8'))
-                            ws.write(index + nrows, 4, tr)
+                            ws.write(index + nrows, 5, tr)
                             index += 1
                     os.remove(writeInfo + file_name)
                     wb.save(writeInfo + file_name)
@@ -164,12 +202,12 @@ class SZZQScrapy(scrapy):
         index = 0
         for tr in data_dict:
             for value in data_dict[tr]:
-                sheet01.write(index, 0, unicode(value['stock_id'], 'utf-8'))
+                sheet01.write(index, 0, value['stock_id'])
                 sheet01.write(index, 1, unicode(value['company_name'], 'utf-8'))
-                sheet01.write(index, 2, unicode(value['attention_time'], 'utf-8'))
+                sheet01.write(index, 2, value['attention_time'])
                 sheet01.write(index, 3, unicode(value['attention_type'], 'utf-8'))
                 sheet01.write(index, 4, unicode(value['company_callback'], 'utf-8'))
-                sheet01.write(index, 4, tr)
+                sheet01.write(index, 5, tr)
                 index += 1
         excel.save('../../download_file/szzq_file/szzq_detail.xls')
         logging.info('save excel file success!')
