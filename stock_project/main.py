@@ -26,5 +26,6 @@ def main():
 
 
 if __name__ == '__main__':
+    print 'hello world!'
     config_log()
     main()
