@@ -10,7 +10,6 @@ from io import open
 
 
 
-
 def readPDF(pdf_file):
     fp = open(pdf_file, 'rb')
     parser_pdf = PDFParser(fp)

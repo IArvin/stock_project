@@ -7,6 +7,7 @@ import xlwt
 import xlrd
 from xlrd import open_workbook
 from xlwt import *
+import threading
 
 PDF_REQUESTS_TIMEOUT = 10
 BRANCH_DICT = {'JCZX': 'JCZX_file/', 'SHZQ': 'SHZQ_file/', 'SZZQ': 'SZZQ_file/'}
@@ -25,9 +26,9 @@ def config_log():
     log.addHandler(fileTimeHandler)
 
 
-class scrapy(object):
+class scrapy(threading.Thread):
     def __init__(self):
-        pass
+        threading.Thread.__init__(self)
 
     def savePDF(self, pdf_url, stock_id, search_key, url, judge, file_time):
         pdf_response = ''
@@ -111,6 +112,10 @@ class scrapy(object):
         else:
             self.write_excel(data_list, website, search_key)
 
-if __name__ == '__main__':
+
+def callback():
     res = scrapy()
     res.xlsWrite([], 'SHZQ', 'shzq_demo.xls')
+
+if __name__ == '__main__':
+    callback()

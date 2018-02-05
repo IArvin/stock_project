@@ -96,6 +96,11 @@ class JCZXScrapy(scrapy):
             index += 1
         return None
 
+    def run(self):
+        search_data = ['关注函', '问询函']
+        for x in search_data:
+            self.main(x)
+
 
 if __name__ == '__main__':
     config_log()
