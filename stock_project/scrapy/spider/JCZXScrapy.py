@@ -56,7 +56,7 @@ class JCZXScrapy(scrapy):
         return search_page
 
     def parseRespone(self, search_page, search_key):
-        logging.info(search_page)
+        logging.info(json.dumps(search_page))
         if search_page['announcements'] == []:
             return []
         data_list = []
@@ -64,8 +64,8 @@ class JCZXScrapy(scrapy):
         for tr in search_page['announcements']:
             judge_time = datetime.datetime.strptime('2017-09-30', '%Y-%m-%d')
             now_file_time = datetime.datetime.strptime(tr['adjunctUrl'].split('/')[-2], '%Y-%m-%d')
-            if now_file_time > judge_time:
-                continue
+            # if now_file_time > judge_time:
+            #     continue
 
             data_dict = {}
             data_dict['company_name'] = tr['secName']
@@ -98,8 +98,23 @@ class JCZXScrapy(scrapy):
 
     def run(self):
         search_data = ['关注函', '问询函']
-        for x in search_data:
-            self.main(x)
+        for data in search_data:
+            index = 1
+            while True:
+                response_dict = self.search(data, index)
+                if response_dict == {}:
+                    continue
+                data_list = self.parseRespone(response_dict, data)
+                if data_list == []:
+                    break
+
+                if data == '关注函':
+                    excel_file_name = 'jczx_attention_demo.xls'
+                else:
+                    excel_file_name = 'jczx_inquiry_demo.xls'
+
+                self.xlsWrite(data_list, 'JCZX', excel_file_name, data)
+                index += 1
 
 
 if __name__ == '__main__':

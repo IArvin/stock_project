@@ -14,19 +14,21 @@ from pyquery import PyQuery as pq
 from scrapy.scrapy import scrapy
 import threading
 from utils.threadpool import ThreadPool
+import threading
 
 
 # createTime: 2017-10-09 16:02:05
 # desc: EXCEL表单中问询公告相关数据下载
 
 
-class XLSScrapy():
+class XLSScrapy(threading.Thread):
     def __init__(self):
+        threading.Thread.__init__(self)
         self.session = requests.session()
         self.timeout = 15
 
     def read_excel(self):
-        book = xlrd.open_workbook("../../tools/notice_inquiry.xls", formatting_info=True)
+        book = xlrd.open_workbook("tools/notice_inquiry.xls", formatting_info=True)
         sheet = book.sheets()[0]
         nrows = sheet.nrows
 
@@ -83,7 +85,7 @@ class XLSScrapy():
         if response == '' or response.status_code != 200:
             return None
 
-        path = '../../download_file/announcement/pdf/'
+        path = 'download_file/announcement/pdf/'
 
         pdf_name = path + stock_id + '_' + announcement_time + '.PDF'
         if pdf_name == '':
@@ -136,7 +138,7 @@ class XLSScrapy():
         excel.save('../../download_file/announcement/'+file_name)
         logging.info('save excel file success!')
 
-    def main(self):
+    def run(self):
         data_list = self.read_excel()
         self.search(data_list)
         return None

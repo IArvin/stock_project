@@ -43,9 +43,9 @@ class scrapy(threading.Thread):
         path = ''
 
         if search_key == '关注函':
-            path = '../../download_file/attention/'+ BRANCH_DICT[judge]
+            path = 'download_file/attention/'+ BRANCH_DICT[judge]
         elif search_key == '问询函':
-            path = '../../download_file/inquiry/'+ BRANCH_DICT[judge]
+            path = 'download_file/inquiry/'+ BRANCH_DICT[judge]
         else:
             return ''
 
@@ -73,18 +73,18 @@ class scrapy(threading.Thread):
             sheet01.write(index, 4, tr['time'])
         if website == 'JCZX':
             if search_key == '关注函':
-                excel.save('../../download_file/excel_file/jczx_attention_demo.xls')
+                excel.save('download_file/excel_file/jczx_attention_demo.xls')
             else:
-                excel.save('../../download_file/excel_file/jczx_inquiry_demo.xls')
+                excel.save('download_file/excel_file/jczx_inquiry_demo.xls')
         elif website == 'SHZQ':
             if search_key == '关注函':
-                excel.save('../../download_file/excel_file/shzq_attention_demo.xls')
+                excel.save('download_file/excel_file/shzq_attention_demo.xls')
             else:
-                excel.save('../../download_file/excel_file/shzq_inquiry_demo.xls')
+                excel.save('download_file/excel_file/shzq_inquiry_demo.xls')
         logging.info('save excel file success!')
 
     def xlsWrite(self, data_list, website, file_name, search_key):
-        writeInfo = '../../download_file/excel_file/'
+        writeInfo = 'download_file/excel_file/'
         listFile = os.listdir(writeInfo)
         if listFile != []:
             if file_name in listFile:

@@ -49,6 +49,24 @@ class SHZQScrapy(scrapy):
             self.xlsWrite(data_list, 'SHZQ', excel_file_name, search_key)
             index += 1
 
+    def run(self):
+        search_data = ['问询函', '关注函']
+        for search_key in search_data:
+            index = 1
+            while True:
+                resultStr = self.search(search_key, index)
+                if resultStr == None:
+                    return None
+                data_list = self.parseResponse(resultStr, search_key)
+                if data_list == []:
+                    break
+                if search_key == '关注函':
+                    excel_file_name = 'shzq_attention_demo.xls'
+                else:
+                    excel_file_name = 'shzq_inquiry_demo.xls'
+                self.xlsWrite(data_list, 'SHZQ', excel_file_name, search_key)
+                index += 1
+
     def search(self, search_key, index):
         logging.info('index is: %s' % str(index))
         data = {

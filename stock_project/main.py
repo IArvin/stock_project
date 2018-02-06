@@ -25,16 +25,18 @@ class stockEngine(object):
         pass
 
     def main(self):
-        search_data = ['关注函', '问询函']
         jczx = JCZXScrapy()
         jczx.start()
-        # for x in search_data:
-        #     pass
+        shzq = SHZQScrapy()
+        shzq.start()
+        szzq = SZZQScrapy()
+        szzq.start()
+        xlsx = XLSScrapy()
+        xlsx.start()
+
 
 if __name__ == '__main__':
-    print 'hello world!'
     config_log()
+    logging.info('global setting init ......')
     stock = stockEngine()
     stock.main()
-    while True:
-        time.sleep(5)

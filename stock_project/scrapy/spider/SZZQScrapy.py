@@ -108,6 +108,7 @@ class SZZQScrapy(scrapy):
             pdf_response = self.session.get(url, timeout=self.timeout)
         except Exception, e:
             logging.info(e)
+
         if pdf_response == '':
             logging.info('request failed, no response, return None')
             return 'failed'
@@ -116,21 +117,25 @@ class SZZQScrapy(scrapy):
 
         if table_key == 'tab1':
             if judge_type == 'detail':
-                path = '../../download_file/szzq_file/big/detail/'
+                path = 'download_file/szzq_file/big/detail/'
             elif judge_type == 'callback':
-                path = '../../download_file/szzq_file/big/callback/'
+                path = 'download_file/szzq_file/big/callback/'
         elif table_key == 'tab2':
             if judge_type == 'detail':
-                path = '../../download_file/szzq_file/middle/detail/'
+                path = 'download_file/szzq_file/middle/detail/'
             elif judge_type == 'callback':
-                path = '../../download_file/szzq_file/middle/callback/'
+                path = 'download_file/szzq_file/middle/callback/'
         else:
             if judge_type == 'detail':
-                path = '../../download_file/szzq_file/small/detail/'
+                path = 'download_file/szzq_file/small/detail/'
             elif judge_type == 'callback':
-                path = '../../download_file/szzq_file/small/callback/'
+                path = 'download_file/szzq_file/small/callback/'
 
         pdf_name = path + stock_id + '_' + attention_time + '.PDF'
+
+        if pdf_name == '':
+            logging.info('pdf_name is null string, return failed!')
+            return 'failed'
 
         f = open(pdf_name, 'wb')
         f.write(pdf_response.content)
@@ -212,7 +217,7 @@ class SZZQScrapy(scrapy):
         excel.save('../../download_file/szzq_file/szzq_detail.xls')
         logging.info('save excel file success!')
 
-    def main(self):
+    def run(self):
         index = 1
         while True:
             result_dict = self.search(index)
