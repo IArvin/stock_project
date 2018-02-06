@@ -86,6 +86,8 @@ class XLSScrapy(threading.Thread):
             return None
 
         path = 'download_file/announcement/pdf/'
+        if not os.path.exists(path):
+            os.makedirs(path)
 
         pdf_name = path + stock_id + '_' + announcement_time + '.PDF'
         if pdf_name == '':
@@ -97,7 +99,10 @@ class XLSScrapy(threading.Thread):
         return 'success'
 
     def writeXLS(self, announcement_list, file_name):
-        writeInfo = '../../download_file/announcement/'
+        writeInfo = 'download_file/announcement/'
+        if not os.path.exists(writeInfo):
+            os.makedirs(writeInfo)
+
         listFile = os.listdir(writeInfo)
         if listFile != []:
             if file_name in listFile:
@@ -121,12 +126,12 @@ class XLSScrapy(threading.Thread):
                     logging.info('write in success!')
                     break
             else:
-                self.write_excel(announcement_list, file_name)
+                self.write_excel(announcement_list, file_name, writeInfo)
         else:
-            self.write_excel(announcement_list, file_name)
+            self.write_excel(announcement_list, file_name, writeInfo)
         return None
 
-    def write_excel(self, announcement_list, file_name):
+    def write_excel(self, announcement_list, file_name, writeInfo):
         excel = xlwt.Workbook()
         sheet01 = excel.add_sheet('demo_01')
         for index, tr in enumerate(announcement_list):
@@ -135,7 +140,7 @@ class XLSScrapy(threading.Thread):
             sheet01.write(index, 2, tr['stock_id'])
             sheet01.write(index, 3, tr['file_size'])
             sheet01.write(index, 4, tr['announcement_time'])
-        excel.save('../../download_file/announcement/'+file_name)
+        excel.save(writeInfo+file_name)
         logging.info('save excel file success!')
 
     def run(self):

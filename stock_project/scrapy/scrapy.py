@@ -12,6 +12,7 @@ import threading
 PDF_REQUESTS_TIMEOUT = 10
 BRANCH_DICT = {'JCZX': 'JCZX_file/', 'SHZQ': 'SHZQ_file/', 'SZZQ': 'SZZQ_file/'}
 
+
 # createTime: 2017-10-06 18:31:24
 # desc: spider public method
 
@@ -33,7 +34,7 @@ class scrapy(threading.Thread):
     def savePDF(self, pdf_url, stock_id, search_key, url, judge, file_time):
         pdf_response = ''
         try:
-            pdf_response = self.session.get(url+pdf_url, timeout=PDF_REQUESTS_TIMEOUT)
+            pdf_response = self.session.get(url + pdf_url, timeout=PDF_REQUESTS_TIMEOUT)
         except Exception, e:
             logging.info(e)
         if pdf_response == '':
@@ -43,11 +44,14 @@ class scrapy(threading.Thread):
         path = ''
 
         if search_key == '关注函':
-            path = 'download_file/attention/'+ BRANCH_DICT[judge]
+            path = 'download_file/attention/' + BRANCH_DICT[judge]
         elif search_key == '问询函':
-            path = 'download_file/inquiry/'+ BRANCH_DICT[judge]
+            path = 'download_file/inquiry/' + BRANCH_DICT[judge]
         else:
             return ''
+
+        if not os.path.exists(path):
+            os.makedirs(path)
 
         if '_doc' in stock_id:
             pdf_name = path + stock_id.split('_')[0] + '_' + file_time + '.docx'
@@ -55,7 +59,8 @@ class scrapy(threading.Thread):
             pdf_name = path + stock_id + '_' + file_time + '.PDF'
 
         if pdf_name == '':
-            return None
+            logging.info('pdf name is null, return ...')
+            return ''
         f = open(pdf_name, 'wb')
         f.write(pdf_response.content)
         f.close()
@@ -71,20 +76,29 @@ class scrapy(threading.Thread):
             sheet01.write(index, 2, tr['stock_id'])
             sheet01.write(index, 3, tr['file_size'])
             sheet01.write(index, 4, tr['time'])
+
+        excel_path = 'download_file/excel_file/'
+
+        if not os.path.exists(excel_path):
+            os.makedirs(excel_path)
+
         if website == 'JCZX':
             if search_key == '关注函':
-                excel.save('download_file/excel_file/jczx_attention_demo.xls')
+                excel.save(excel_path + 'jczx_attention_demo.xls')
             else:
-                excel.save('download_file/excel_file/jczx_inquiry_demo.xls')
+                excel.save(excel_path + 'jczx_inquiry_demo.xls')
         elif website == 'SHZQ':
             if search_key == '关注函':
-                excel.save('download_file/excel_file/shzq_attention_demo.xls')
+                excel.save(excel_path + 'shzq_attention_demo.xls')
             else:
-                excel.save('download_file/excel_file/shzq_inquiry_demo.xls')
+                excel.save(excel_path + 'shzq_inquiry_demo.xls')
         logging.info('save excel file success!')
 
     def xlsWrite(self, data_list, website, file_name, search_key):
         writeInfo = 'download_file/excel_file/'
+        if not os.path.exists(writeInfo):
+            os.makedirs(writeInfo)
+
         listFile = os.listdir(writeInfo)
         if listFile != []:
             if file_name in listFile:
@@ -98,11 +112,11 @@ class scrapy(threading.Thread):
                     ws = wb.get_sheet(index)
                     nrows = sheet.nrows
                     for index, tr in enumerate(data_list):
-                        ws.write(index+nrows, 0, tr['company_name'])
-                        ws.write(index+nrows, 1, tr['title'])
-                        ws.write(index+nrows, 2, tr['stock_id'])
-                        ws.write(index+nrows, 3, tr['file_size'])
-                        ws.write(index+nrows, 4, tr['time'])
+                        ws.write(index + nrows, 0, tr['company_name'])
+                        ws.write(index + nrows, 1, tr['title'])
+                        ws.write(index + nrows, 2, tr['stock_id'])
+                        ws.write(index + nrows, 3, tr['file_size'])
+                        ws.write(index + nrows, 4, tr['time'])
                     os.remove(writeInfo + file_name)
                     wb.save(writeInfo + file_name)
                     logging.info('write in success!')
@@ -116,6 +130,7 @@ class scrapy(threading.Thread):
 def callback():
     res = scrapy()
     res.xlsWrite([], 'SHZQ', 'shzq_demo.xls')
+
 
 if __name__ == '__main__':
     callback()
