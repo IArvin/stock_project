@@ -17,6 +17,49 @@ BRANCH_DICT = {'JCZX': 'JCZX_file/', 'SHZQ': 'SHZQ_file/', 'SZZQ': 'SZZQ_file/'}
 # desc: spider public method
 
 
+def xlsWrite_test(func):      # test only but at the same time can actually use
+    def xls_write(*args,**kwargs):
+        data_list = args[1]
+        website = args[2]
+        file_name = args[3]
+        search_key = args[4]
+
+        excel_path = 'download_file/excel_file/'
+        if not os.path.exists(excel_path):
+            os.makedirs(excel_path)
+
+        listFile = os.listdir(excel_path)
+        if listFile != []:
+            if file_name in listFile:
+                book = open_workbook(excel_path + file_name, formatting_info=True)
+                for index, sheet in enumerate(book.sheets()):
+                    if sheet.name != ('demo_01'):
+                        continue
+
+                    logging.info('xls have this sheet,get nrows and write in ......')
+                    wb = copy(book)
+                    ws = wb.get_sheet(index)
+                    nrows = sheet.nrows
+                    for index, tr in enumerate(data_list):
+                        ws.write(index + nrows, 0, tr['company_name'])
+                        ws.write(index + nrows, 1, tr['title'])
+                        ws.write(index + nrows, 2, tr['stock_id'])
+                        ws.write(index + nrows, 3, tr['file_size'])
+                        ws.write(index + nrows, 4, tr['time'])
+                    os.remove(excel_path + file_name)
+                    wb.save(excel_path + file_name)
+                    logging.info('write in success for test decorator!')
+                    break
+        #     else:
+        #         self.write_excel(data_list, website, search_key)
+        # else:
+        #     self.write_excel(data_list, website, search_key)
+        logging.info('test decorator')
+        return func(*args,**kwargs)
+
+    return xls_write
+
+
 def config_log():
     fmt = '%(asctime)s - %(threadName)s - %(levelname)s - %(message)s'
     log = logging.getLogger('')
@@ -30,6 +73,7 @@ def config_log():
 class scrapy(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
+        self.excel_path = 'download_file/excel_file/'
 
     def savePDF(self, pdf_url, stock_id, search_key, url, judge, file_time):
         pdf_response = ''
@@ -77,32 +121,30 @@ class scrapy(threading.Thread):
             sheet01.write(index, 3, tr['file_size'])
             sheet01.write(index, 4, tr['time'])
 
-        excel_path = 'download_file/excel_file/'
 
-        if not os.path.exists(excel_path):
-            os.makedirs(excel_path)
+        if not os.path.exists(self.excel_path):
+            os.makedirs(self.excel_path)
 
         if website == 'JCZX':
             if search_key == '关注函':
-                excel.save(excel_path + 'jczx_attention_demo.xls')
+                excel.save(self.excel_path + 'jczx_attention_demo.xls')
             else:
-                excel.save(excel_path + 'jczx_inquiry_demo.xls')
+                excel.save(self.excel_path + 'jczx_inquiry_demo.xls')
         elif website == 'SHZQ':
             if search_key == '关注函':
-                excel.save(excel_path + 'shzq_attention_demo.xls')
+                excel.save(self.excel_path + 'shzq_attention_demo.xls')
             else:
-                excel.save(excel_path + 'shzq_inquiry_demo.xls')
+                excel.save(self.excel_path + 'shzq_inquiry_demo.xls')
         logging.info('save excel file success!')
 
     def xlsWrite(self, data_list, website, file_name, search_key):
-        writeInfo = 'download_file/excel_file/'
-        if not os.path.exists(writeInfo):
-            os.makedirs(writeInfo)
+        if not os.path.exists(self.excel_path):
+            os.makedirs(self.excel_path)
 
-        listFile = os.listdir(writeInfo)
+        listFile = os.listdir(self.excel_path)
         if listFile != []:
             if file_name in listFile:
-                book = open_workbook(writeInfo + file_name, formatting_info=True)
+                book = open_workbook(self.excel_path + file_name, formatting_info=True)
                 for index, sheet in enumerate(book.sheets()):
                     if sheet.name != ('demo_01'):
                         continue
@@ -117,8 +159,8 @@ class scrapy(threading.Thread):
                         ws.write(index + nrows, 2, tr['stock_id'])
                         ws.write(index + nrows, 3, tr['file_size'])
                         ws.write(index + nrows, 4, tr['time'])
-                    os.remove(writeInfo + file_name)
-                    wb.save(writeInfo + file_name)
+                    os.remove(self.excel_path + file_name)
+                    wb.save(self.excel_path + file_name)
                     logging.info('write in success!')
                     break
             else:

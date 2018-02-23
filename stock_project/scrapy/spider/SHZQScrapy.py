@@ -9,6 +9,7 @@ import xlrd
 import xlwt
 from pyquery import PyQuery as pq
 from scrapy.scrapy import scrapy
+from scrapy.scrapy import xlsWrite_test
 import threading
 from utils.threadpool import ThreadPool
 
@@ -65,7 +66,13 @@ class SHZQScrapy(scrapy):
                 else:
                     excel_file_name = 'shzq_inquiry_demo.xls'
                 self.xlsWrite(data_list, 'SHZQ', excel_file_name, search_key)
+                # self.test_decorator(data_list, 'SHZQ', excel_file_name, search_key)   # decorator only test
                 index += 1
+
+    @xlsWrite_test
+    def test_decorator(self, data_list, website, excel_file_name, search_key):
+        print 'testest'
+        return None
 
     def search(self, search_key, index):
         logging.info('index is: %s' % str(index))
