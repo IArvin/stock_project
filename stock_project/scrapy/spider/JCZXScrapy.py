@@ -33,6 +33,8 @@ class JCZXScrapy(scrapy):
         self.timeout = 12
 
     def search(self, search_key, index):
+        if index == 7:
+            print('lllllll')
         logging.info('index is: %s' % str(index))
         params = {
             "searchkey": search_key,
@@ -47,6 +49,7 @@ class JCZXScrapy(scrapy):
         try:
             self.session.get('http://www.cninfo.com.cn/cninfo-new/index', timeout=self.timeout)
             search_page = self.session.get('http://www.cninfo.com.cn/cninfo-new/fulltextSearch/full', params=params, timeout=self.timeout).json()
+            print(json.dumps(search_page))
         except Exception, e:
             logging.info(e)
 
@@ -64,8 +67,8 @@ class JCZXScrapy(scrapy):
         for tr in search_page['announcements']:
             judge_time = datetime.datetime.strptime('2017-09-30', '%Y-%m-%d')
             now_file_time = datetime.datetime.strptime(tr['adjunctUrl'].split('/')[-2], '%Y-%m-%d')
-            # if now_file_time > judge_time:
-            #     continue
+            if now_file_time > judge_time:
+                continue
 
             data_dict = {}
             data_dict['company_name'] = tr['secName']
@@ -87,7 +90,7 @@ class JCZXScrapy(scrapy):
             if data_list == []:
                 break
 
-            if data == '关注函':
+            if data == '年报问询':
                 excel_file_name = 'jczx_attention_demo.xls'
             else:
                 excel_file_name = 'jczx_inquiry_demo.xls'
@@ -97,7 +100,7 @@ class JCZXScrapy(scrapy):
         return None
 
     def run(self):
-        search_data = ['关注函', '问询函']
+        search_data = ['年报问询', '年报回函']
         for data in search_data:
             index = 1
             while True:
@@ -108,7 +111,7 @@ class JCZXScrapy(scrapy):
                 if data_list == []:
                     break
 
-                if data == '关注函':
+                if data == '年报问询':
                     excel_file_name = 'jczx_attention_demo.xls'
                 else:
                     excel_file_name = 'jczx_inquiry_demo.xls'
@@ -120,6 +123,6 @@ class JCZXScrapy(scrapy):
 if __name__ == '__main__':
     config_log()
     result = JCZXScrapy()
-    search_data = ['关注函', '问询函']
+    search_data = ['年报问询', '年报回函']
     for x in search_data:
         result.main(x)

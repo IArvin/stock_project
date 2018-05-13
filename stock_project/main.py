@@ -33,12 +33,12 @@ class stockEngine(object):
     def main(self):
         jczx = JCZXScrapy()
         jczx.start()
-        shzq = SHZQScrapy()
-        shzq.start()
-        szzq = SZZQScrapy()
-        szzq.start()
-        xlsx = XLSScrapy()
-        xlsx.start()
+        # shzq = SHZQScrapy()
+        # shzq.start()
+        # szzq = SZZQScrapy()
+        # szzq.start()
+        # xlsx = XLSScrapy()
+        # xlsx.start()
 
 
 if __name__ == '__main__':

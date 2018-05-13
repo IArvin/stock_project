@@ -87,9 +87,9 @@ class scrapy(threading.Thread):
 
         path = ''
 
-        if search_key == '关注函':
+        if search_key == '年报问询':
             path = 'download_file/attention/' + BRANCH_DICT[judge]
-        elif search_key == '问询函':
+        elif search_key == '年报回函':
             path = 'download_file/inquiry/' + BRANCH_DICT[judge]
         else:
             return ''
@@ -97,10 +97,16 @@ class scrapy(threading.Thread):
         if not os.path.exists(path):
             os.makedirs(path)
 
-        if '_doc' in stock_id:
-            pdf_name = path + stock_id.split('_')[0] + '_' + file_time + '.docx'
+        if search_key == '年报问询':
+            if '_doc' in stock_id:
+                pdf_name = path + stock_id.split('_')[0] + '-' + file_time.split('-')[0] + '-1.docx'
+            else:
+                pdf_name = path + stock_id + '-' + file_time.split('-')[0] + '-1.PDF'
         else:
-            pdf_name = path + stock_id + '_' + file_time + '.PDF'
+            if '_doc' in stock_id:
+                pdf_name = path + stock_id.split('_')[0] + '-' + file_time.split('-')[0] + '-2.docx'
+            else:
+                pdf_name = path + stock_id + '-' + file_time.split('-')[0] + '-2.PDF'
 
         if pdf_name == '':
             logging.info('pdf name is null, return ...')
@@ -126,12 +132,12 @@ class scrapy(threading.Thread):
             os.makedirs(self.excel_path)
 
         if website == 'JCZX':
-            if search_key == '关注函':
+            if search_key == '年报问询':
                 excel.save(self.excel_path + 'jczx_attention_demo.xls')
             else:
                 excel.save(self.excel_path + 'jczx_inquiry_demo.xls')
         elif website == 'SHZQ':
-            if search_key == '关注函':
+            if search_key == '年报问询':
                 excel.save(self.excel_path + 'shzq_attention_demo.xls')
             else:
                 excel.save(self.excel_path + 'shzq_inquiry_demo.xls')
