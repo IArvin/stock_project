@@ -50,7 +50,7 @@ class JCZXScrapy(scrapy):
             self.session.get('http://www.cninfo.com.cn/cninfo-new/index', timeout=self.timeout)
             search_page = self.session.get('http://www.cninfo.com.cn/cninfo-new/fulltextSearch/full', params=params, timeout=self.timeout).json()
             print(json.dumps(search_page))
-        except Exception, e:
+        except Exception as e:
             logging.info(e)
 
         if search_page == {}:
