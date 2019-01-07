@@ -6,6 +6,9 @@ import logging
 import threading
 
 
+DATABASE_LOCK = threading.Lock()
+
+
 class defaultSettings():
     def __init__(self):
         pass
